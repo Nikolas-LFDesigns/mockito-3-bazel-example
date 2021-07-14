@@ -1,0 +1,207 @@
+workspace(name = "test_app")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+
+android_sdk_repository(name = "androidsdk")
+
+http_archive(
+    name = "com_github_bazelbuild_buildtools",
+    sha256 = "a5fca3f810588b441a647cf601a42ca98a75aa0681c2e9ade3ce9187d47b506e",
+    strip_prefix = "buildtools-3.4.0",
+    url = "https://github.com/bazelbuild/buildtools/archive/3.4.0.zip",
+)
+
+load("@bazel_tools//tools/build_defs/repo:android.bzl", "aar_import_external")
+load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
+
+http_archive(
+    name = "rules_android",
+    sha256 = "cd06d15dd8bb59926e4d65f9003bfc20f9da4b2519985c27e190cddc8b7a7806",
+    strip_prefix = "rules_android-0.1.1",
+    urls = ["https://github.com/bazelbuild/rules_android/archive/v0.1.1.zip"],
+)
+
+java_import_external(
+    name = "com_google_code_findbugs_jsr305",
+    jar_sha256 = "c885ce34249682bc0236b4a7d56efcc12048e6135a5baf7a9cde8ad8cda13fcd",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar",
+    ],
+)
+
+java_import_external(
+    name = "org_objenesis_objenesis",
+    jar_sha256 = "03d960bd5aef03c653eb000413ada15eb77cdd2b8e4448886edf5692805e35f3",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/org/objenesis/objenesis/3.2/objenesis-3.2.jar",
+    ],
+    testonly_ = True,
+)
+
+java_import_external(
+    name = "net_bytebuddy_byte_buddy_agent",
+    jar_sha256 = "64af9b74de8dbd55b83ae63249ee06d78be74fc64b24ac856cc74ff14ae56049",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-agent/1.11.6/byte-buddy-agent-1.11.6.jar",
+    ],
+    testonly_ = True,
+)
+
+java_import_external(
+    name = "net_bytebuddy_byte_buddy",
+    jar_sha256 = "04285136cf181bda1453062915b6c83cd2e2b7e476c6929b4e513a3530e6ee3a",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy/1.11.6/byte-buddy-1.11.6.jar",
+    ],
+    testonly_ = True,
+)
+
+java_import_external(
+    name = "com_jakewharton_android_repackaged_dalvik_dx",
+    jar_sha256 = "b29c1c21e52ed6238cd3fed39d880a17ecf2360118604548cea8821be6801e1c",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/com/jakewharton/android/repackaged/dalvik-dx/9.0.0_r3/dalvik-dx-9.0.0_r3.jar",
+    ],
+    testonly_ = True,
+)
+
+java_import_external(
+    name = "net_bytebuddy_byte_buddy_android",
+    jar_sha256 = "7021606b3749f7e764ca1fff28d7eb073d88919ddfbdc91463016bd92d918a1c",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-android/1.11.6/byte-buddy-android-1.11.6.jar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@com_jakewharton_android_repackaged_dalvik_dx",
+        "@net_bytebuddy_byte_buddy",
+    ],
+)
+
+java_import_external(
+    name = "org_mockito_mockito_core",
+    jar_sha256 = "a135e56bca2f0afec578f15e72f2c29050b66821c7f58e4aaaf3dbfffae7f904",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/org/mockito/mockito-core/3.11.2/mockito-core-3.11.2.jar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@net_bytebuddy_byte_buddy",
+        "@net_bytebuddy_byte_buddy_agent",
+        "@org_objenesis_objenesis",
+    ],
+)
+
+java_import_external(
+    name = "org_mockito_mockito_android",
+    jar_sha256 = "c631906a7909199f47c4e0d68137bd37a909d2577f06548fe2642b7189cf6358",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/org/mockito/mockito-android/3.11.2/mockito-android-3.11.2.jar",
+    ],
+    testonly_ = True,
+    exports = [
+        "@org_mockito_mockito_core",
+    ],
+    deps = [
+        "@net_bytebuddy_byte_buddy_android",
+    ],
+)
+
+aar_import_external(
+    name = "androidx_test_monitor",
+    aar_sha256 = "46a912a1e175f27a97521af3f50e5af87c22c49275dd2c57c043740012806325",
+    aar_urls = [
+        "https://nexus.pentaho.org/content/groups/omni/androidx/test/monitor/1.4.0/monitor-1.4.0.aar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@androidx_annotation_annotation",
+    ],
+)
+
+java_import_external(
+    name = "org_hamcrest_hamcrest_core",
+    jar_sha256 = "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar",
+    ],
+    testonly_ = True,
+)
+
+java_import_external(
+    name = "junit_junit",
+    jar_sha256 = "59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a",
+    jar_urls = [
+        "https://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@org_hamcrest_hamcrest_core",
+    ],
+)
+
+java_import_external(
+    name = "androidx_annotation_annotation",
+    jar_sha256 = "d38d63edb30f1467818d50aaf05f8a692dea8b31392a049bfa991b159ad5b692",
+    jar_urls = [
+        "https://maven.google.com/androidx/annotation/annotation/1.1.0/annotation-1.1.0.jar",
+    ],
+)
+
+aar_import_external(
+    name = "androidx_test_rules",
+    aar_sha256 = "01401cd7d1185530f6081ce503ce611d18d8a483ea15599a16c39f15b2f8e7d8",
+    aar_urls = [
+        "https://maven.google.com/androidx/test/rules/1.4.0/rules-1.4.0.aar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@androidx_test_runner",
+    ],
+)
+
+aar_import_external(
+    name = "androidx_test_services_storage",
+    aar_sha256 = "35cfbf442abb83e5876cd5deb9de02ae047459f18f831097c5caa76d626bc38a",
+    aar_urls = [
+        "https://maven.google.com/androidx/test/services/storage/1.4.0/storage-1.4.0.aar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@androidx_test_monitor",
+        "@com_google_code_findbugs_jsr305",
+    ],
+)
+
+aar_import_external(
+    name = "androidx_test_runner",
+    aar_sha256 = "e3f3d8b8d5d4a3edcacbdaa4a31bda2b0e41d3e704b02b3750466a06367ec5a0",
+    aar_urls = [
+        "https://maven.google.com/androidx/test/runner/1.4.0/runner-1.4.0.aar",
+    ],
+    testonly_ = True,
+    deps = [
+        "@androidx_annotation_annotation",
+        "@androidx_test_monitor",
+        "@androidx_test_services_storage",
+        "@junit_junit",
+    ],
+)
+
+http_archive(
+    name = "rules_jvm_external",
+    sha256 = "70a876d7e22d76db599191442cdf2650269770102ea91be3f330a3db1b148236",
+    strip_prefix = "rules_jvm_external-8ca81e01547c30bde92c3a1c369642b1891e9287",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/8ca81e01547c30bde92c3a1c369642b1891e9287.zip",
+)
+
+http_archive(
+    name = "android_test_support",
+    sha256 = "0c5d67ea781c25d9400394279a12eac3d75eda09cabe8ef73c0185575ec90e4d",
+    strip_prefix = "android-test-androidx-test-1.3.0",
+    url = "https://github.com/android/android-test/archive/androidx-test-1.3.0.tar.gz",
+)
+
+load("@android_test_support//:repo.bzl", "android_test_repositories")
+
+android_test_repositories()

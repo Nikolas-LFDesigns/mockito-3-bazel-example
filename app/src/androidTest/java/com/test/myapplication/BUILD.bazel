@@ -1,0 +1,32 @@
+load("@rules_android//android:rules.bzl", "android_binary", "android_instrumentation_test", "android_library")
+
+android_library(
+    name = "ExampleInstrumentedTest",
+    testonly = True,
+    srcs = [
+        "ExampleInstrumentedTest.java",
+    ],
+    deps = [
+        "@androidx_test_runner",
+        "@junit_junit",
+        "@org_mockito_mockito_android",
+    ],
+)
+
+android_binary(
+    name = "test_application",
+    testonly = True,
+    custom_package = "com.test.myapplication",
+    instruments = "//app",
+    manifest = "AndroidManifest.xml",
+    deps = [
+        ":ExampleInstrumentedTest",
+    ],
+)
+
+android_instrumentation_test(
+    name = "main_test",
+    args = ["--enable_display=false"],
+    target_device = "@android_test_support//tools/android/emulated_devices/generic_phone:android_{api}_x86".format(api = 23),
+    test_app = ":test_application",
+)
